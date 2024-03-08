@@ -29,7 +29,6 @@ const LogInPage = () => {
         lastname: "",
         username: "",
         password: "",
-        
     };
 
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -37,7 +36,8 @@ const LogInPage = () => {
     const [password, setPassword] = useState("")
     const [image, setImage] = useState("");
     const [comparePassword, setComparePassword] = useState(false)
-    const [data, setData] = useState(initialState)
+    const [compareUsername, setCompareUsername] = useState(false)
+    const [dataForm, setDataForm] = useState(initialState)
 
     const handleOpenModal = () => {
         setIsOpenModal(true)
@@ -45,7 +45,9 @@ const LogInPage = () => {
 
     const handleCancelModal = () => {
         setIsOpenModal(false)
-        setData(initialState)
+        setDataForm(initialState)
+        setImage("")
+        setCompareUsername(false)
     }
 
     const handleLogIn = async(e) => {
@@ -73,26 +75,36 @@ const LogInPage = () => {
       };
 
     const handleOnChange = (e) => {
-        setData(
+        setDataForm(
             {
-                ...data,
+                ...dataForm,
                 [e.target.name] : e.target.value
             }
             
         )
     }
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async(e) => {
         e.preventDefault()
         try {
-
+          const {data} = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, {
+            ...dataForm,
+            profilePicture: image
+          })
+          if(data) {
+            setDataForm(initialState)
+            setImage("")
+            setCompareUsername(false)
+            setIsOpenModal(false)
+          }
         } catch (error) {
-
+          setCompareUsername(true)
+          console.log(error)
         }
-        setData(initialState)
+        
     } 
 
-    console.log("data", data)
+
    
 
   return (
@@ -127,14 +139,15 @@ const LogInPage = () => {
                 <div className='mb-3' style={{borderBottom: "1px solid #dadde1"}}></div>
                 <form onSubmit={handleSignUp}>
                 <div className='form-group mb-2 d-flex justify-content-between gap-2'>
-                    <input type='text' className='w-50 form-control' placeholder='Firstname' style={{background: "#f5f6f7"}} name='firstname' onChange={handleOnChange} value={data.firstname} required/>
-                    <input type='text' className='w-50 form-control' placeholder='Lastname' style={{background: "#f5f6f7"}} name='lastname' onChange={handleOnChange}  value={data.lastname} required/>
+                    <input type='text' className='w-50 form-control' placeholder='Firstname' style={{background: "#f5f6f7"}} name='firstname' onChange={handleOnChange} value={dataForm.firstname} required/>
+                    <input type='text' className='w-50 form-control' placeholder='Lastname' style={{background: "#f5f6f7"}} name='lastname' onChange={handleOnChange}  value={dataForm.lastname} required/>
                 </div>
                 <div className='form-group mb-2'>
-                    <input type='text' className='w-100 form-control' placeholder='Username' style={{background: "#f5f6f7"}} name='username' onChange={handleOnChange} value={data.username} required/>
+                    <input type='text' className='w-100 form-control' placeholder='Username' style={{background: "#f5f6f7"}} name='username' onChange={handleOnChange} value={dataForm.username} required/>
+                    {compareUsername ? (<div style={{color:"#f02849", fontSize:"13px"}}>The username that you've entered is already.</div>) : ("")}
                 </div>
                 <div className='form-group mb-3'>
-                    <input type='password' className='w-100 form-control' placeholder='Password' style={{background: "#f5f6f7"}} name='password' onChange={handleOnChange} value={data.password} required/>
+                    <input type='password' className='w-100 form-control' placeholder='Password' style={{background: "#f5f6f7"}} name='password' onChange={handleOnChange} value={dataForm.password} required/>
                 </div>
                 <div className='form-group mb-3'>
                 <WrapperUploadFile
