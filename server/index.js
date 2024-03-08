@@ -9,6 +9,7 @@ dotenv.config()
 const AuthRoute = require("./routes/AuthRoute")
 const ChatRoute = require("./routes/ChatRoute")
 const MessageRoute = require("./routes/MessageRoute")
+const UserRoute = require("./routes/UserRoute")
 
 const app = express()
 
@@ -25,3 +26,4 @@ mongoose.connect(CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true }
 app.use("/auth", AuthRoute)
 app.use("/chat", ChatRoute)
 app.use("/message", MessageRoute)
+app.use("/user", UserRoute)
