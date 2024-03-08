@@ -9,6 +9,8 @@ const ChatPage = () => {
 
   const [users, setUsers] = useState([])
   const [currentChat, setCurrentChat] = useState(null);
+//   const [sendMessage, setSendMessage] = useState(null);
+//   const [receivedMessage, setReceivedMessage] = useState(null);
 
   const fetchAllUser = async () => {
     try {
@@ -31,7 +33,7 @@ const ChatPage = () => {
 
   return (
     <div style={{height : "720px"}}>
-        <HeaderComponent avatar={user?.profilePicture} avatarReceiver={currentChat}/>
+        <HeaderComponent currentUser={user} Receiver={currentChat}/>
         <div className='row h-100'>
             <div className='col-3' style={{overflow: "scroll"}}>
                 <div >
@@ -39,7 +41,7 @@ const ChatPage = () => {
                     <div className='chat-list'>
                         {users.map((user) => (
                             <div
-                            onClick={() => handleFindChat(user?.id)}
+                            onClick={() => handleFindChat(user?._id)}
                             >
                                 <ConversationComponent
                                   data = {user}
@@ -51,6 +53,8 @@ const ChatPage = () => {
             </div>
             <div className='col-9' style={{padding: "20px", background: "#f0f2f5"}}>
                 <ChatBox
+                  chat={currentChat}
+                  currentUser={user?.id}
                 />
             </div>
         </div>

@@ -1,11 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from "../../assets/images/profile.png"
-const HeaderComponent = ({avatar, avatarReceiver}) => {
-  
+import axios from 'axios'
+const HeaderComponent = ({currentUser, Receiver}) => {
+
+  const [receiverData, setReceiverData] = useState(null)
+
+  useEffect(() => {
+    const receiverId = Receiver?.members?.find((id) => id !== currentUser?.id)
+    const getReceiver = async () => {
+      try {
+        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/user/get-user/${receiverId}`)
+        setReceiverData(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    if(Receiver !== null) {
+      getReceiver()
+    }
+  },[Receiver, currentUser])
+
+
   return (
     <div style={{width: "100%", height: "70px", gap: "120px"}} className='d-flex'>
         <div className='d-flex gap-2 align-items-center' style={{paddingLeft: "10px"}}>
-            <img src={avatar} alt='avatar' style={{
+            <img src={currentUser?.profilePicture} alt='avatar' style={{
                 height: '50px',
                 width: '50px',
                 borderRadius: '50%',
@@ -16,13 +35,13 @@ const HeaderComponent = ({avatar, avatarReceiver}) => {
         </div>
        
         <div className='d-flex align-items-center gap-2'>
-            <img src={logo} alt='avatar' style={{
+            <img src={receiverData?.profilePicture} alt='avatar' style={{
                     height: '50px',
                     width: '50px',
                     borderRadius: '50%',
                     objectFit: 'cover'}}/>
             <div className='name'>
-                <span>Phong</span>
+                <span>{receiverData?.username}</span>
             </div>
         </div>
         
