@@ -1,10 +1,11 @@
 import React from 'react'
 import logo from "../../assets/images/profile.png"
-const HeaderComponent = () => {
+const HeaderComponent = ({avatar, avatarReceiver}) => {
+  
   return (
     <div style={{width: "100%", height: "70px", gap: "120px"}} className='d-flex'>
         <div className='d-flex gap-2 align-items-center' style={{paddingLeft: "10px"}}>
-            <img src={logo} alt='avatar' style={{
+            <img src={avatar} alt='avatar' style={{
                 height: '50px',
                 width: '50px',
                 borderRadius: '50%',

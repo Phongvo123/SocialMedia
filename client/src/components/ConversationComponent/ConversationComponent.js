@@ -1,17 +1,17 @@
 import React from 'react'
-import logo from "../../assets/images/profile.png"
 
-const ConversationComponent = () => {
+
+const ConversationComponent = ({data}) => {
   return (
     <div className='d-flex gap-2'>
-        <img src={logo} alt='avatar' style={{
+        <img src={data.profilePicture} alt='avatar' style={{
              height: '40px',
              width: '40px',
              borderRadius: '50%',
              objectFit: 'cover'
         }}/>
         <div className='d-flex flex-column' style={{fontSize: '0.8rem'}}>
-            <span>Phong</span>
+            <span>{data.username}</span>
             <span style={{color: '#51e200'}}>Online</span>
         </div>
     </div>
