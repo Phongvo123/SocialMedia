@@ -3,10 +3,10 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
 const registerUser = async(req, res) => {
-    const {username, password, firstname, lastname} = req.body
+    const {username, password, firstname, lastname, profilePicture} = req.body
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
-    const newUser = new UserModel({username, password: hashedPassword, firstname, lastname})
+    const newUser = new UserModel({username, password: hashedPassword, firstname, lastname, profilePicture})
     try {
         const oldUser = await UserModel.findOne({ username });
         if(oldUser) {

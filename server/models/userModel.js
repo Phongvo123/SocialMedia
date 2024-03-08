@@ -22,7 +22,10 @@ const UserSchema = new mongoose.Schema(
           type: Boolean,
           default: false,
         },
-       profilePicture: String,
+       profilePicture: {
+          type: String,
+          required: true
+       },
         coverPicture: String,
         about: String,
         livesIn: String,
