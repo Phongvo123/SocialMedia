@@ -5,6 +5,8 @@ import {useNavigate} from 'react-router-dom'
 import { Upload, Button } from 'antd'
 import { getBase64 } from '../../untils'
 import styled from "styled-components";
+import { useDispatch } from 'react-redux'
+import { addUser } from '../../redux/slices/userSlice'
 
 const LogInPage = () => {
 
@@ -23,6 +25,7 @@ const LogInPage = () => {
   `;
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const initialState = {
         firstname: "",
@@ -58,7 +61,8 @@ const LogInPage = () => {
                 password
             })
             if(data) {
-                navigate("/chat")
+              dispatch(addUser(data.user))
+              navigate("/chat")
             } 
         } catch(error) {
             setComparePassword(true)
