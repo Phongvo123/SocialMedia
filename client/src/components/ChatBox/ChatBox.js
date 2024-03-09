@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InputEmoji from 'react-input-emoji'
 import { IoSend } from "react-icons/io5";
 import "./ChatBox.css"
@@ -6,9 +6,18 @@ import axios from 'axios';
 import {format} from "timeago.js"
 
 
-const ChatBox = ({chat, currentUser}) => {
+const ChatBox = ({chat, currentUser, setSendMessage, receivedMessage}) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
+  const scroll = useRef()
+
+  useEffect(() => {
+    if(receivedMessage !== null && receivedMessage.chatId === chat._id) {
+      setMessages([...messages, receivedMessage])
+    }
+  },[receivedMessage])
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -23,9 +32,32 @@ const ChatBox = ({chat, currentUser}) => {
     if (chat !== null) fetchMessages();
   },[chat])
 
-  const handleChange = (e) => {
-    setNewMessage(e.target.value)
+  const handleChange = (newMessage) => {
+    setNewMessage(newMessage)
   }
+
+  const handleSend = async (e) => {
+    e.preventDefault()
+    const message = {
+      chatId : chat?._id,
+      senderId : currentUser,
+      text : newMessage
+    }
+    const receiverId = chat?.members.find((id) => id !== currentUser)
+   setSendMessage({...message, receiverId})
+    try {
+      const {data} = await axios.post(`${process.env.REACT_APP_API_URL}/message`,message)
+      setMessages([...messages, data])
+      setNewMessage("")
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  
+
+  
 
   return (
     <div>
@@ -33,7 +65,7 @@ const ChatBox = ({chat, currentUser}) => {
             <div className='d-flex flex-column'>
               {messages.map((message) => (
                 <>
-                  <div className={message.senderId === currentUser? "message own" : "message"}>
+                  <div className={message.senderId === currentUser? "message own" : "message"} ref={scroll}>
                     <span>{message.text}</span>
                     <span>{format(message.createdAt)}</span>
                   </div>
@@ -41,13 +73,13 @@ const ChatBox = ({chat, currentUser}) => {
               ))}
             </div>
         </div>
-        <div className='chat-sender d-flex align-items-center'>
+        <div className='chat-sender'>
             <div>+</div>
             <InputEmoji
               value={newMessage}
               onChange={handleChange}
             />
-            <div><IoSend/></div>
+            <div onClick={(e) => handleSend(e)}><IoSend/></div>
         </div>
     </div>
   )

@@ -22,7 +22,7 @@ const HeaderComponent = ({currentUser, Receiver}) => {
 
 
   return (
-    <div style={{width: "100%", height: "70px", gap: "120px"}} className='d-flex'>
+    <div style={{width: "100%", height: "70px", gap: "120px", position: "sticky", background: "#fff", top: "0"}} className='d-flex'>
         <div className='d-flex gap-2 align-items-center' style={{paddingLeft: "10px"}}>
             <img src={currentUser?.profilePicture} alt='avatar' style={{
                 height: '50px',
