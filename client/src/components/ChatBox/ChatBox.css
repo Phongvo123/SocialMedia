@@ -1,6 +1,6 @@
 .message {
 
-    background: #0866ff;
+    background: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);;
     color: white;
     padding: 0.7rem;
     border-radius: 1rem 1rem 1rem 0;
@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-bottom: 5px;
   }
   
   .message>span:nth-child(2){

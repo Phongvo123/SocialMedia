@@ -25,7 +25,6 @@ const ChatPage = () => {
     });
   },[user])
 
-
   useEffect(() => {
     if(sendMessage!==null) {
       socket.current.emit('send-message', sendMessage)
@@ -39,6 +38,10 @@ const ChatPage = () => {
     })
   },[])
   
+  const checkOnlineStatus = (id) => {
+    const online = onlineUsers.find((user) => user.userId === id)
+    return online ? true : false
+  }
   
 
   const fetchAllUser = async () => {
@@ -60,28 +63,31 @@ const ChatPage = () => {
     setCurrentChat(data)
   }
 
+  console.log(users)
   
   return (
     <div style={{height: "720px"}}>
       <HeaderComponent currentUser={user} Receiver={currentChat}/>
       <div className='d-flex' style={{marginTop: "0"}}>
             <div className='col-3' style={{position: "fixed", top: "70px"}}>
-                <div >
+                <div style={{paddingLeft: "30px"}}>
                     <h2 className='mb-3'>Chat</h2>
                     <div className='chat-list'>
                         {users.map((user) => (
                             <div
+                            style={{marginBottom: "20px", cursor: "pointer"}}
                             onClick={() => handleFindChat(user?._id)}
                             >
                                 <ConversationComponent
                                   data = {user}
+                                  online={checkOnlineStatus(user?._id)}
                                 />
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-            <div className='col-9' style={{padding: "20px", background: "#f0f2f5", marginLeft: "25%"}}>
+            <div className='col-9' style={{padding: "20px", background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
                 <ChatBox
                   chat={currentChat}
                   currentUser={user?.id}

@@ -55,17 +55,17 @@ const ChatBox = ({chat, currentUser, setSendMessage, receivedMessage}) => {
     }
   }
 
-  
-
-  
+  useEffect(()=> {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  },[messages])
 
   return (
     <div>
-        <div className='chat-body'>
+        <div className='chat-body' style={{height: "650px", overflow: "scroll"}}>
             <div className='d-flex flex-column'>
               {messages.map((message) => (
                 <>
-                  <div className={message.senderId === currentUser? "message own" : "message"} ref={scroll}>
+                  <div ref={scroll} className={message.senderId === currentUser? "message own" : "message"}>
                     <span>{message.text}</span>
                     <span>{format(message.createdAt)}</span>
                   </div>
@@ -73,14 +73,13 @@ const ChatBox = ({chat, currentUser, setSendMessage, receivedMessage}) => {
               ))}
             </div>
         </div>
-        <div className='chat-sender'>
-            <div>+</div>
+        <div className='chat-sender' style={{height: "50px"}}>
             <InputEmoji
               value={newMessage}
               onChange={handleChange}
             />
-            <div onClick={(e) => handleSend(e)}><IoSend/></div>
-        </div>
+            <div onClick={(e) => handleSend(e)} style={{cursor: "pointer" , fontSize: "30px"}}><IoSend/></div>
+            </div>
     </div>
   )
 }
