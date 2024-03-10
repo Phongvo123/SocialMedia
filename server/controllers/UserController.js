@@ -11,9 +11,13 @@ const getUser = async (req, res) => {
 }
 
 const getAllUsers = async (req, res) => {
+    const search = req.query.search || ""
+    const query = {
+        firstname: { $regex: search, $options: "i"}   
+    }
     const id = req.params.id
     try {
-        const users = await UserModel.find({_id: {$ne: id}})
+        const users = await UserModel.find({_id: {$ne: id}}).find(query)
         return res.status(200).json(users)
     } catch (error) {
         return  res.status(500).json(error)

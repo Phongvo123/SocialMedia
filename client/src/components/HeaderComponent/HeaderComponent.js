@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-const HeaderComponent = ({currentUser, Receiver}) => {
+const HeaderComponent = ({currentUser, Receiver, setSearch}) => {
 
   const [receiverData, setReceiverData] = useState(null)
+
 
   useEffect(() => {
     const receiverId = Receiver?.members?.find((id) => id !== currentUser?.id)
@@ -31,7 +32,7 @@ const HeaderComponent = ({currentUser, Receiver}) => {
                 objectFit: 'cover'
             }} 
             />
-            <input type='text' className='form-control rounded' placeholder='Search' style={{height: "40px", width: "180px"}}/>
+            <input type='text' className='form-control rounded' placeholder='Search' style={{height: "40px", width: "180px"}} onChange={(e) => setSearch(e.target.value)}/>
         </div>
        {Receiver ? (
         <div className='d-flex align-items-center gap-2' style={{paddingLeft: "10px"}}>

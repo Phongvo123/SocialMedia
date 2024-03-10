@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux'
 import axios from "axios"
 import {io} from 'socket.io-client'
 import "./ChatPage.css"
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent'
 const ChatPage = () => {
   const user = useSelector((state) => state.user)
 
@@ -16,6 +17,9 @@ const ChatPage = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
+  const [search, setSearch] = useState("")
+  const [loading, setLoading] = useState(true)
+
 
   
   useEffect(() => {
@@ -47,7 +51,7 @@ const ChatPage = () => {
 
   const fetchAllUser = async () => {
     try {
-        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/user/${user?.id}`)
+        const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/user/${user?.id}?search=${search}`)
         if(data) {
             setUsers(data)
         }
@@ -56,25 +60,36 @@ const ChatPage = () => {
     }
   }
   useEffect(()=>{
+    setLoading(true)
     fetchAllUser()
-  },[user?.id])
+  },[user?.id, search])
 
   const handleFindChat = async (id) => {
     const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/chat/find/${user?.id}/${id}`)
     setCurrentChat(data)
   }
 
-  console.log(users)
+  useEffect(()=>{
+    setTimeout(()=>{
+      setLoading(false)
+    },[1000])
+  },[search])
   
   return (
     <div style={{height: "720px"}}>
-      <HeaderComponent currentUser={user} Receiver={currentChat}/>
+      <HeaderComponent currentUser={user} Receiver={currentChat} setSearch={setSearch}/>
       <div className='d-flex' style={{marginTop: "0"}}>
             <div className='col-3' style={{position: "fixed", top: "70px"}}>
                 <div>
                     <h2 className='mb-3' style={{paddingLeft: "30px"}}>Chat</h2>
-                    <div className='chat-list'>
-                        {users.map((user) => (
+                   
+                      {loading ? (
+                        <div className='text-center'>
+                          <LoadingComponent/>
+                        </div>
+                      ) : (
+                        <div className='chat-list'>
+                           {users.map((user) => (
                             <div
                             className='conversation-container'
                             onClick={() => handleFindChat(user?._id)}
@@ -85,11 +100,13 @@ const ChatPage = () => {
                                 />
                             </div>
                         ))}
-                    </div>
+                        </div>
+                      )}
+                    
                 </div>
             </div>
             {currentChat ? (
-              <div className='col-9' style={{padding: "20px", background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
+              <div className='col-9' style={{ background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
                <ChatBox
                 chat={currentChat}
                 currentUser={user?.id}

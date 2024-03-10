@@ -62,7 +62,7 @@ const ChatBox = ({chat, currentUser, setSendMessage, receivedMessage}) => {
   return (
     <div>
         <div className='chat-body' style={{height: "650px", overflow: "scroll"}}>
-            <div className='d-flex flex-column'>
+            <div className='d-flex flex-column' style={{padding: "20px"}}>
               {messages.map((message) => (
                 <>
                   <div ref={scroll} className={message.senderId === currentUser? "message own" : "message"}>
