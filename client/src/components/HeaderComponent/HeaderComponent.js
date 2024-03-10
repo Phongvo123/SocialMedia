@@ -21,7 +21,7 @@ const HeaderComponent = ({currentUser, Receiver}) => {
 
 
   return (
-    <div style={{width: "100%", height: "70px", gap: "120px", position: "sticky", background: "#fff", top: "0"}} className='d-flex'>
+    <div style={{width: "100%", height: "70px", gap: "112px", position: "sticky", background: "#fff", top: "0"}} className='d-flex'>
         <div className='d-flex gap-2 align-items-center' style={{paddingLeft: "30px"}}>
             <img src={currentUser?.profilePicture} alt='avatar' style={{
                 height: '50px',
@@ -33,19 +33,21 @@ const HeaderComponent = ({currentUser, Receiver}) => {
             />
             <input type='text' className='form-control rounded' placeholder='Search' style={{height: "40px", width: "180px"}}/>
         </div>
-       
+       {Receiver ? (
         <div className='d-flex align-items-center gap-2' style={{paddingLeft: "10px"}}>
-            <img src={receiverData?.profilePicture} alt='avatar' style={{
-                    height: '50px',
-                    width: '50px',
-                    borderRadius: '50%',
-                    border: "1px solid #0866ff",
-                    objectFit: 'cover'}}/>
-            <div className='name'>
-                <span>{receiverData?.firstname} {receiverData?.lastname}</span>
-            </div>
+          <img src={receiverData?.profilePicture} alt='avatar' style={{
+            height: '50px',
+            width: '50px',
+            borderRadius: '50%',
+            border: "1px solid #0866ff",
+            objectFit: 'cover'}}/>
+          <div className='name'>
+            <span>{receiverData?.firstname} {receiverData?.lastname}</span>
+          </div>
         </div>
-        
+       ): (
+        <div style={{background: "#f0f2f5", width: "100%"}}/>
+       )}
     </div>
   )
 }

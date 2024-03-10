@@ -3,7 +3,7 @@ import React from 'react'
 
 const ConversationComponent = ({data, online}) => {
   return (
-    <div className='d-flex gap-2'>
+    <div className='d-flex gap-2 conversation'>
         <img src={data.profilePicture} alt='avatar' style={{
              height: '40px',
              width: '40px',

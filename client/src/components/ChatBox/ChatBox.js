@@ -78,7 +78,11 @@ const ChatBox = ({chat, currentUser, setSendMessage, receivedMessage}) => {
               value={newMessage}
               onChange={handleChange}
             />
-            <div onClick={(e) => handleSend(e)} style={{cursor: "pointer" , fontSize: "30px"}}><IoSend/></div>
+            {newMessage ? (
+              <div onClick={(e) => handleSend(e)} style={{cursor: "pointer" , fontSize: "30px"}}><IoSend/></div>
+            ) : (
+              ""
+            )}
             </div>
     </div>
   )

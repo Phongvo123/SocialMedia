@@ -5,6 +5,7 @@ import HeaderComponent from '../../components/HeaderComponent/HeaderComponent'
 import {useSelector} from 'react-redux'
 import axios from "axios"
 import {io} from 'socket.io-client'
+import "./ChatPage.css"
 const ChatPage = () => {
   const user = useSelector((state) => state.user)
 
@@ -70,12 +71,12 @@ const ChatPage = () => {
       <HeaderComponent currentUser={user} Receiver={currentChat}/>
       <div className='d-flex' style={{marginTop: "0"}}>
             <div className='col-3' style={{position: "fixed", top: "70px"}}>
-                <div style={{paddingLeft: "30px"}}>
-                    <h2 className='mb-3'>Chat</h2>
+                <div>
+                    <h2 className='mb-3' style={{paddingLeft: "30px"}}>Chat</h2>
                     <div className='chat-list'>
                         {users.map((user) => (
                             <div
-                            style={{marginBottom: "20px", cursor: "pointer"}}
+                            className='conversation-container'
                             onClick={() => handleFindChat(user?._id)}
                             >
                                 <ConversationComponent
@@ -87,14 +88,23 @@ const ChatPage = () => {
                     </div>
                 </div>
             </div>
-            <div className='col-9' style={{padding: "20px", background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
-                <ChatBox
-                  chat={currentChat}
-                  currentUser={user?.id}
-                  setSendMessage={setSendMessage}
-                  receivedMessage={receivedMessage}
-                />
-            </div>
+            {currentChat ? (
+              <div className='col-9' style={{padding: "20px", background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
+               <ChatBox
+                chat={currentChat}
+                currentUser={user?.id}
+                setSendMessage={setSendMessage}
+                receivedMessage={receivedMessage}
+               />
+              </div>
+            ) : (
+              <div className='col-9 d-flex align-items-center justify-content-center' style={{height: "700px", marginLeft: "25%", background: "#f0f2f5"}}>
+                <span className='chatbox-empty-message'>
+                  Tap on a chat to start conversation...
+                </span>
+              </div>
+            )}
+            
         </div>
     </div>
  
