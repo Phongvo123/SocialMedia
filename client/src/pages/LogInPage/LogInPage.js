@@ -60,8 +60,9 @@ const LogInPage = () => {
                 username,
                 password
             })
+            console.log("data", data)
             if(data) {
-              dispatch(addUser(data.user))
+              dispatch(addUser(data))
               navigate("/chat")
             } 
         } catch(error) {

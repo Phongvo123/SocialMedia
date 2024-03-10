@@ -19,12 +19,20 @@ export const userSlice = createSlice({
             state.lastname = lastname;
             state.username = username;
             state.profilePicture = profilePicture
+        },
+        resetUser: (state) => {
+            state.id = "";
+            state.firstname = "";
+            state.lastname = "";
+            state.username = "";
+            state.profilePicture = "";
         }
     }
 })
 
 export const {
-    addUser
+    addUser,
+    resetUser
 } = userSlice.actions
 
 export default userSlice.reducer

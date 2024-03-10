@@ -82,7 +82,6 @@ const ChatPage = () => {
             <div className='col-3' style={{position: "fixed", top: "70px"}}>
                 <div>
                     <h2 className='mb-3' style={{paddingLeft: "30px"}}>Chat</h2>
-                   
                       {loading ? (
                         <div className='text-center'>
                           <LoadingComponent/>
@@ -102,7 +101,6 @@ const ChatPage = () => {
                         ))}
                         </div>
                       )}
-                    
                 </div>
             </div>
             {currentChat ? (
