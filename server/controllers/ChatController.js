@@ -124,4 +124,16 @@ const removeGroup = async (req, res) => {
     }
 }
 
-module.exports = {createChat, userChats, findChat, createGroupChat, renameGroup, addToGroup, removeGroup}
+const findGroupChat = async (req, res) => {
+    try {
+        const groupChat = await ChatModel.find({users: { $elemMatch: { $eq: req.params.userId } }})
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+        .sort({ updatedAt: -1 })
+        return res.status(200).json(groupChat)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+module.exports = {createChat, userChats, findChat, createGroupChat, renameGroup, addToGroup, removeGroup, findGroupChat}
