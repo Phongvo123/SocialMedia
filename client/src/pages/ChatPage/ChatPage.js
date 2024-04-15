@@ -7,6 +7,7 @@ import axios from "axios"
 import {io} from 'socket.io-client'
 import "./ChatPage.css"
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent'
+import { Toaster } from 'react-hot-toast'
 const ChatPage = () => {
   const user = useSelector((state) => state.user)
 
@@ -59,6 +60,11 @@ const ChatPage = () => {
         console.log(error)
     }
   }
+
+  const fetchAllGroupChat = async () => {
+    
+  }
+
   useEffect(()=>{
     setLoading(true)
     fetchAllUser()
@@ -81,7 +87,7 @@ const ChatPage = () => {
       <div className='d-flex' style={{marginTop: "0"}}>
             <div className='col-3' style={{position: "fixed", top: "70px"}}>
                 <div>
-                    <h2 className='mb-3' style={{paddingLeft: "30px"}}>Chat</h2>
+                    <h2 className='mb-3' style={{paddingLeft: "30px"}}>Users</h2>
                       {loading ? (
                         <div className='text-center'>
                           <LoadingComponent/>
@@ -102,6 +108,12 @@ const ChatPage = () => {
                         </div>
                       )}
                 </div>
+                <div>
+                  <h2 className='mb-3' style={{paddingLeft: "30px"}}>Group</h2>
+                  <div className='groupchat-list'>
+
+                  </div>
+                </div>    
             </div>
             {currentChat ? (
               <div className='col-9' style={{ background: "#f0f2f5" ,marginLeft: "25%", height: "700px"}}>
@@ -121,8 +133,8 @@ const ChatPage = () => {
             )}
             
         </div>
+        <Toaster/>
     </div>
- 
   )
 }
 

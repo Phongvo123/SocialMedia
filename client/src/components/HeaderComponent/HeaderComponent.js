@@ -58,7 +58,7 @@ const HeaderComponent = ({currentUser, Receiver, setSearch}) => {
           >
             <HiUserGroup/>
           </span>
-          <GroupChatModal title="CREATE GROUP CHAT" isOpen={isModalOpen} onCancel={handleCancel} footer={null}/>
+          <GroupChatModal title="CREATE GROUP CHAT" isOpen={isModalOpen} setIsOpen={setIsModalOpen} onCancel={handleCancel} footer={null}/>
         </div>
        {Receiver ? (
         <div className='d-flex align-items-center gap-2' style={{paddingLeft: "10px"}}>
