@@ -41,4 +41,87 @@ const findChat = async (req, res) => {
     }
 }
 
-module.exports = {createChat, userChats, findChat}
+const createGroupChat = async (req, res) => {
+    if(!req.body.users || !req.body.name) {
+        return res.status(400).send({message: "Please fill all the feilds"})
+    }
+    var users = JSON.parse(req.body.users)
+    if(users.length < 2) {
+        return res.status(400).send("More than 2 users are required to form a group chat")
+    }
+    users.push(req.body.currentUser)
+    try {
+        const groupChat = await ChatModel.create({
+            chatName: req.body.name,
+            users: users,
+            isGroupChat: true,
+            groupAdmin: req.body.currentUser
+        })
+        const fullGroupChat = await ChatModel.findOne({_id: groupChat._id})
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+        return res.status(200).json(fullGroupChat)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+const renameGroup = async (req, res) => {
+    const {chatId, chatName} = req.body
+    try {
+        const updatedChat = await ChatModel.findByIdAndUpdate(
+            chatId,
+            {
+                chatName: chatName
+            },
+            {
+                new: true
+            }
+        ).populate("users", "-password").populate("groupAdmin", "-password")
+        return res.status(200).json(updatedChat)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+const addToGroup = async (req, res) => {
+    const {chatId, userId} = req.body
+    try {
+        const added = await ChatModel.findByIdAndUpdate(
+            chatId,
+            {
+                $push: {users: userId}
+            },
+            {
+                new: true
+            }
+        )
+        .populate("users","-password")
+        .populate("groupAdmin", "-password")
+        return res.status(200).json(added)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+const removeGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+    try {
+        const removed = await ChatModel.findByIdAndUpdate(
+            chatId,
+            {
+              $pull: { users: userId },
+            },
+            {
+              new: true,
+            }
+          )
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password");
+        return res.status(200).json(removed)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
+module.exports = {createChat, userChats, findChat, createGroupChat, renameGroup, addToGroup, removeGroup}
